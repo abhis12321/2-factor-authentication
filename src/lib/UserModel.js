@@ -16,6 +16,15 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    tfa:{
+        active:{
+            type:Boolean,
+            default:false,
+        },
+        secret:{
+            type:String,
+        }
+    },
     createdAt:{
         type:Date,
         default:Date.now,
