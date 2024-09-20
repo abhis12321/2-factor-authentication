@@ -1,6 +1,6 @@
 "use client"
 
-export default function UserRegistration() {
+export default function UserRegistrationForm() {
     const handleUserRegistration = (e) => {
         e.preventDefault();
         const payload = {

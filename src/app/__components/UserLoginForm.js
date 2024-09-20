@@ -1,6 +1,6 @@
 "use client"
 
-export default function LoginForm() {
+export default function UserLoginForm() {
     const handleLogin = (e) => {
         e.preventDefault();
         const payload = {

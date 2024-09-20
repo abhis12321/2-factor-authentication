@@ -1,12 +1,11 @@
-import React from 'react'
-import LoginForm from './__components/LoginForm'
-import UserRegistration from './__components/UserRegistration'
+import UserLoginForm from './__components/UserLoginForm'
+import UserRegistrationForm from './__components/UserRegistrationForm'
 
 export default function page() {
   return (
     <div className='min-h-screen flex flex-col items-center justify-center p-4'>
-      {/* <LoginForm /> */}
-      <UserRegistration />
+      {/* <UserLoginForm /> */}
+      <UserRegistrationForm />
     </div>
   )
 }
