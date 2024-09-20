@@ -1,11 +1,13 @@
-"use cleint"
-import { createContext, useContext } from "react"
-const authContext = createContext({ children });
+"use client"
+import { createContext, useContext, useState } from "react"
+const authContext = createContext();
 
 
-export default function AuthProvider() {
+export default function AuthProvider({ children }) {
+    const [user , setUser] = useState();
     const value = {
-
+        user,
+        setUser,
     };
 
   return (
