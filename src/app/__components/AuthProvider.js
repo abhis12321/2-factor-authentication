@@ -11,9 +11,9 @@ export default function AuthProvider({ children }) {
         setUser,
     };
 
-    useEffect(() => {
-      console.log(user)
-    }, [user])
+    // useEffect(() => {
+    //   console.log(user)
+    // }, [user])
 
   return (
     <authContext.Provider value={value}>

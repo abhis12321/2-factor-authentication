@@ -1,16 +1,19 @@
 import { useState } from 'react'
 import TfaForm from './TfaForm';
+import { useAuth } from './AuthProvider';
 
-export default function UserProfile({ user }) {
-    const [tfaForm, setTfaForm] = useState(false);
+export default function UserProfile() {
+  const { user , setUser } = useAuth();
+  const [tfaForm, setTfaForm] = useState(false);
   return (
     <div className='w-full max-w-[600px] mx-auto p-4 rounded flex flex-col gap-1 items-center justify-center bg-white shadow-[0_0_2px_gray]'>
-      <div className="">{ user.name }</div>
-      <div className="">{ user.email }</div>
-      <button className="w-[120px] py-1 text-center rounded bg-sky-700 hover:bg-sky-600 active:bg-blue-700 text-white font-semibold" onClick={() => setTfaForm(prev => !prev)}>enable TFA</button>
+      <div className="">{user.name}</div>
+      <div className="">{user.email}</div>
+      <button className="text-xs font-semibold py-1 px-5 bg-red-700 hover:bg-red-600 active:bg-orange-500 text-white rounded" onClick={() => setUser(null)}>logout</button>
+      <button className="w-fit min-w-[120px] py-1 px-3 text-center rounded bg-sky-700 hover:bg-sky-600 active:bg-blue-700 text-white font-semibold" onClick={() => setTfaForm(prev => !prev)}>{user.tfa.active ? "2-factor authentication is activated" : "TFA enable"} </button>
 
       {
-        tfaForm && <TfaForm  user={user}/>
+        tfaForm && !user.tfa.active && <TfaForm user={user} />
       }
     </div>
   )

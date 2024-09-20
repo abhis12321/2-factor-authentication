@@ -21,9 +21,12 @@ const userSchema = new mongoose.Schema({
             type:Boolean,
             default:false,
         },
+        qrcode:{
+            type:String,
+        },
         secret:{
             type:String,
-        }
+        },
     },
     createdAt:{
         type:Date,

@@ -1,10 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
+import { useAuth } from "./AuthProvider";
 
-export default function TfaForm({ user }) {
-    const [qrcode, setQrcode] = useState();
+export default function TfaForm() {
+    const { user , setUser } = useAuth()
+    const [qrcode, setQrcode] = useState(user?.tfa?.qrcode);
 
     useEffect(() => {
+        if(!qrcode)
         axios.get(`/api/tfa/${user._id}`)
             .then(res => res.data)
             .then(data => data.image)
@@ -17,7 +20,15 @@ export default function TfaForm({ user }) {
         const payload = {
             code:e.target.code.value,
         }
-        console.log(payload);
+        axios.post(`/api/tfa/${user._id}` , payload)
+            .then(res => res.data)
+            .then(data => {
+                if(data.user) {
+                    setUser(data.user)
+                }
+                 alert(data.message)
+                })
+            .catch(error => alert(error.message));
     }
     return (
         <form className="flex flex-col items-center justify-center gap-1" onSubmit={handleTFAform}>
