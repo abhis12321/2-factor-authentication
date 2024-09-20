@@ -32,7 +32,7 @@ export const PUT = async(req) => {
         } else if(user.tfa?.active) {
             const verify = authenticator.check(code , user.tfa.secret);
             if(!verify) {
-                return NextResponse.json({ message:"wrong OTP! try again..", TFA:true });                
+                return NextResponse.json({ message:"wrong OTP! try again..", TFA:!code && true });                
             }
         }
         user.tfa.secret = "bujho to jaane";

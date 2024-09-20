@@ -16,8 +16,8 @@ export default function page() {
           :
           <div className='w-full max-w-[500px] min-h-[280px] flex flex-col gap-2 bg-white rounded-md overflow-hidden shadow-[0_0_2px_gray]'>
             <div className="flex font-bold items-center justify-around">
-              <div className={`px-4 py-[10px] text-center cursor-pointer ${option == 0 ? "border-b-[2.5px] border-orange-600 text-orange-600" : "text-gray-600"}`} onClick={() => setOption(0)}>register</div>
-              <div className={`px-4 py-[10px] text-center cursor-pointer ${option == 1 ? "border-b-[2.5px] border-orange-600 text-orange-600" : "text-gray-600"}`} onClick={() => setOption(1)}>login</div>
+              <div className={`px-4 pt-3 pb-2 text-center cursor-pointer ${option == 0 ? "border-b-[2.5px] border-orange-600 text-orange-600" : "text-gray-600"}`} onClick={() => setOption(0)}>Register</div>
+              <div className={`px-4 pt-3 pb-2 text-center cursor-pointer ${option == 1 ? "border-b-[2.5px] border-orange-600 text-orange-600" : "text-gray-600"}`} onClick={() => setOption(1)}>Login</div>
             </div>
             <div className="flex">
               {
