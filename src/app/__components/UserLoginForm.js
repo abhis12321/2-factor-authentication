@@ -13,7 +13,7 @@ export default function UserLoginForm() {
       password: e.target.password.value,
     }
 
-    if(TFA)   payload.TFA = TFA;
+    if(TFA)   payload.code = e.target.code.value;
     
     axios.put("/api/user", payload)
       .then(res => res.data)
@@ -21,10 +21,12 @@ export default function UserLoginForm() {
         if(data.TFA) {
           setTFA(true)
         } else {
-          alert(data.message);
           setUser(data.user);
         }
+        alert(data.message);
+        console.log(data)
       })
+      .catch(error => alert(`error : ${error.message}`))
   }
 
   return (
@@ -34,7 +36,7 @@ export default function UserLoginForm() {
 
       {
         TFA && <>
-        <input type="text" name="code" placeholder="code" className="w-full ring-1 p-2 rounded text-center outline-none focus:bg-violet-100" required/>
+        <input type="text" name="code" placeholder="OTP" className="w-full ring-1 p-2 rounded text-center outline-none focus:bg-violet-100" required/>
         </>
       }
 

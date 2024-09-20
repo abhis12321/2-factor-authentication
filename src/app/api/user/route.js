@@ -12,11 +12,8 @@ export const POST = async(req) => {
         const qrcode = await QR.toDataURL(uri);
         const tfa = { secret , qrcode };
         const user = new Users({ ...data, tfa });
-        console.log(secret , typeof(secret))
         await user.save();
-        setInterval(() => {
-            console.log(authenticator.generate(secret))
-        }, 5000);
+        // console.log(secret , typeof(secret))
         return NextResponse.json({ message:"user registration is completed!" });
     } catch(error) {
         return NextResponse.json({ message:error.message });
@@ -28,17 +25,18 @@ export const POST = async(req) => {
 export const PUT = async(req) => {
     try {
         const { email , password, code } = await req.json();
-        console.log(email , password , code);
+        // console.log(email , password , code);
         const user = await Users.findOne({ email , password });
-        // if(user.tfa?.active) {
-        //     if(!code) {
-        //         return NextResponse.json({ message:"wrong credentials" });                
-        //     } else {
-
-        //     }
-        // }
+        if(!user) {
+            return NextResponse.json({ message:"wrong credentials" });
+        } else if(user.tfa?.active) {
+            const verify = authenticator.check(code , user.tfa.secret);
+            if(!verify) {
+                return NextResponse.json({ message:"wrong OTP! try again..", TFA:true });                
+            }
+        }
         user.tfa.secret = "bujho to jaane";
-        return NextResponse.json({ message:user ? "user logged-in successfully!" : "wrong credentials" , user });
+        return NextResponse.json({ message:"user logged-in successfully!" , user});
     } catch(error) {
         return NextResponse.json({ message:error.message });
     }
