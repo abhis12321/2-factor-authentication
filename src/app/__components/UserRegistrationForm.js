@@ -1,4 +1,5 @@
 "use client"
+import axios from "axios"
 
 export default function UserRegistrationForm() {
     const handleUserRegistration = (e) => {
@@ -8,7 +9,11 @@ export default function UserRegistrationForm() {
             email:e.target.email.value,
             password:e.target.password.value,
         }
-        console.log(payload)
+        
+        axios.post("/api/user" , payload)
+            .then(res => res.data)
+            .then(data => alert(data.message))
+            .catch(error => console.error(error));
     }
 
   return (
