@@ -18,8 +18,16 @@ export const POST = async(req) => {
 
 export const PUT = async(req) => {
     try {
-        const { email , password } = await req.json();
+        const { email , password, code } = await req.json();
+        console.log(email , password , code);
         const user = await Users.findOne({ email , password });
+        // if(user.tfa?.active) {
+        //     if(!code) {
+        //         return NextResponse.json({ message:"wrong credentials" });                
+        //     } else {
+
+        //     }
+        // }
         return NextResponse.json({ message:user ? "user logged-in successfully!" : "wrong credentials" , user });
     } catch(error) {
         return NextResponse.json({ message:error.message });
