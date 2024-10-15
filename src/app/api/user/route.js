@@ -5,6 +5,7 @@ import QR from 'qrcode'
 import { sign, verify } from "jsonwebtoken"
 import { cookies } from "next/headers"
 import { TOCKEN_MAX_AGE, TWO_FACTOR_AUTHENTICATION } from "@/server_veriables/constants"
+import { sendOTP } from "@/server_veriables/sendOTP"
 const jwt_secret = process.env.JWT_SECRET || "";
 
 export const GET = async() => {
@@ -40,32 +41,18 @@ export const POST = async(req) => {
 export const PUT = async(req) => {   //login
     try {
         const { email , password, code } = await req.json();
-        // console.log(email , password , code);
         const user = (await Users.findOne({ email , password })).toObject();
         if(!user) {
-            return NextResponse.json({ message:"wrong credentials" });
+            return NextResponse.json({ message:"wrong credentials", success:false });
         } else if(user.tfa?.active) {
-            const verify = authenticator.check(code , user.tfa.secret);
-            if(!verify) {
-                return NextResponse.json({ message:"wrong OTP! try again..", TFA:!code && true });                
-            }
+            return NextResponse.json({ message:"Multi factor authentication is required..", success:true, TFA:1 })
+        } else {
+            await sendOTP(email);
+            return NextResponse.json({ message:"OTP sent to your email..", success:true, TFA:2 })
         }
-        user.tfa.secret = "bujho to jaane";
-        const tocken = sign({ _id:user._id , email , name:user.name , tfa:{ active:user.tfa.active } } , jwt_secret);
-
-        cookies().set({
-            name:TWO_FACTOR_AUTHENTICATION,
-            value:tocken,
-            // secure: process.env.NODE_ENV === 'production' && window.location.protocol === 'https:',
-            httpOnly:true,
-            maxAge:TOCKEN_MAX_AGE,
-            sameSite:"strict",
-            path:"/",
-        })
-
-        return NextResponse.json({ message:"user logged-in successfully!" , user});
     } catch(error) {
-        return NextResponse.json({ message:`wrong credentials, Bad request: Try again..` });
+        // console.log(error.message)
+        return NextResponse.json({ message:"wrong credentials", success:false });
     }
 } 
 
@@ -78,3 +65,4 @@ export const DELETE = () => {
         return NextResponse.json({ message:error.message } , {status:404});        
     }
 }
+

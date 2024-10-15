@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useAuth } from "./AuthProvider"
-import { useState } from "react";
-import OTPform from "./OTPform";
+import { useState } from "react"
+
 
 export default function UserLoginForm() {
   const { setUser } = useAuth();
@@ -14,38 +14,52 @@ export default function UserLoginForm() {
       password: e.target.password.value,
     }
 
-    if (TFA) payload.code = e.target.code.value;
-
-    if(TFA == 2) {
-      axios.put("/api/user/otp", payload)
-        .then(res => res.data)
-        .then(data => {
-          if (data.TFA) {
-            setTFA(1);
-          } else {
-            setTFA(2);
-            setUser(data.user);
-            alert(data.message);
-          }
-          console.log(data)
-        })
-        .catch(error => alert(`error : ${error.message}`))
+    if (TFA == 1) {
+      loginWithMFA({ ...payload, code:e.target.code.value });
+    } else if (TFA == 2) {
+      loginWithOTP({ ...payload, otp:e.target.otp.value });
     } else {
-      axios.put("/api/user", payload)
-        .then(res => res.data)
-        .then(data => {
-          if (data.TFA) {
-            setTFA(1);
-          } else {
-            setTFA(2);
-            setUser(data.user);
-            alert(data.message);
-          }
-          console.log(data)
-        })
-        .catch(error => alert(`error : ${error.message}`))
+      verifyUser(payload);
     }
   }
+
+
+  const verifyUser = (payload) => {
+    axios.put("/api/user", payload)
+      .then(res => res.data)
+      .then(data => {
+        if (data.success) {
+          setTFA(data.TFA);
+        }
+        alert(data.message);
+      })
+      .catch(error => alert(`error : ${error.message}`))
+  }
+
+  const loginWithOTP = (payload) => {
+    axios.put("/api/user/otp", payload)
+      .then(res => res.data)
+      .then(data => {
+        if (data.success) {
+          setUser(data.user);
+        }
+        alert(data.message);
+      })
+      .catch(error => alert(`error : ${error.message}`))
+  }
+  const loginWithMFA = (payload) => {
+    axios.put("/api/user/mfa", payload)
+      .then(res => res.data)
+      .then(data => {
+        if (data.success) {
+          setUser(data.user);
+        }
+        alert(data.message);
+      })
+      .catch(error => alert(`error : ${error.message}`))
+  }
+
+
 
   return (
     <form className='w-full max-w-[440px] mx-auto p-4 flex flex-col items-center justify-center gap-[6px] bg-white' onSubmit={handleLogin}>
