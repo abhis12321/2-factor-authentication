@@ -7,24 +7,24 @@ import { TOCKEN_MAX_AGE, TWO_FACTOR_AUTHENTICATION } from "@/server_veriables/co
 const jwt_secret = process.env.JWT_SECRET || "";
 
 
-export const GET = async() => {
-    try {
-        const email = "jack@gmail.com"
-        const secret = speakeasy.generateSecret({ length: 30 })
-        const otp = speakeasy.totp({
-            secret:`${email}`,
-            encoding:"base32",
-            step:300, // OTP is valid for 5 minutes(300 secs)
-            digits:6,
-            algorithm:"sha1",
-        })
+// export const GET = async() => {
+//     try {
+//         const email = "jack@gmail.com"
+//         const secret = speakeasy.generateSecret({ length: 30 })
+//         const otp = speakeasy.totp({
+//             secret:`${email}`,
+//             encoding:"base32",
+//             step:300, // OTP is valid for 5 minutes(300 secs)
+//             digits:6,
+//             algorithm:"sha1",
+//         })
 
-        return NextResponse.json({ otp , secret:secret.base32 });
-    } catch(error) {
-        console.log(error.message)
-        return NextResponse.json({  }, { status:500 })
-    }
-}
+//         return NextResponse.json({ otp , secret:secret.base32 });
+//     } catch(error) {
+//         console.log(error.message)
+//         return NextResponse.json({  }, { status:500 })
+//     }
+// }
 
 
 export const PUT = async(req) => {

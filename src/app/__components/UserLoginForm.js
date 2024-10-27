@@ -37,7 +37,7 @@ export default function UserLoginForm() {
   }
 
   const loginWithOTP = (payload) => {
-    axios.put("/api/user/otp", payload)
+    axios.put("/api/user/OTP", payload)
       .then(res => res.data)
       .then(data => {
         if (data.success) {
@@ -48,7 +48,7 @@ export default function UserLoginForm() {
       .catch(error => alert(`error : ${error.message}`))
   }
   const loginWithMFA = (payload) => {
-    axios.put("/api/user/mfa", payload)
+    axios.put("/api/user/MFA", payload)
       .then(res => res.data)
       .then(data => {
         if (data.success) {

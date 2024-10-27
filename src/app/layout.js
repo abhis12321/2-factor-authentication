@@ -1,8 +1,7 @@
 import "./globals.css";
 import localFont from "next/font/local";
 import AuthProvider from "./__components/AuthProvider";
-import axios from "axios";
-import { cookies } from "next/headers";
+import { getJWTUserInfo } from "@/getJWTUserInfo";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,9 +20,10 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+  const initialUserInfo = getJWTUserInfo();
   return (
     <html lang="en">
-      <AuthProvider>
+      <AuthProvider initialUserInfo={initialUserInfo}>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100`} >
           { children }
         </body>
